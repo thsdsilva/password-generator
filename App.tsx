@@ -32,8 +32,6 @@ export default function App() {
         style={styles.slider}
         minimumValue={6}
         maximumValue={20}
-        maximumTrackTintColor='black'
-        minimumTrackTintColor='red'
         value={size}
         onValueChange={(value) => setSize(Math.round(value))}
       />
@@ -43,7 +41,7 @@ export default function App() {
       </TouchableOpacity>
 
       <Modal visible={modalVisible} animationType='fade' transparent={true}>
-        <PasswordModal/>
+        <PasswordModal password={password} handleClose={() => setModalVisible(false) } />
       </Modal>
     </View>
   )
