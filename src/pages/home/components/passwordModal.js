@@ -21,13 +21,19 @@ export default function PasswordModal({ password, handleClose }) {
       <View style={styles.content}>
         <Text style={styles.message}>Generated password</Text>
 
-        <Pressable style={styles.innerPassword} onLongPress={() => handlePassword("copy")}>
+        <Pressable
+          style={styles.passwordContainer}
+          onLongPress={() => handlePassword("copy")}
+        >
           <Text style={styles.passwordText}>{password}</Text>
         </Pressable>
 
         <View style={styles.buttonArea}>
-          <TouchableOpacity style={styles.button} onPress={handleClose}>
-            <Text style={styles.buttonText}>Back</Text>
+          <TouchableOpacity
+            style={[styles.button, styles.buttonBack]}
+            onPress={handleClose}
+          >
+            <Text style={styles.buttonBackText}>Back</Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -64,14 +70,19 @@ const styles = StyleSheet.create({
     color: "#000",
     marginBottom: 24,
   },
-  innerPassword: {
+  passwordContainer: {
     backgroundColor: "#0e0e0e",
     width: "90%",
     padding: 14,
     borderRadius: 8,
+    height: 50,
+    justifyContent: "center",
+    alignItems: "center",
   },
   passwordText: {
     color: "#fff",
+    fontWeight: "bold",
+    fontSize: 16,
     textAlign: "center",
   },
   buttonArea: {
@@ -83,9 +94,22 @@ const styles = StyleSheet.create({
   },
   button: {
     flex: 1,
-    alignItems: "center",
     marginTop: 14,
     marginBottom: 14,
+    height: 50,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  buttonBack: {
+    backgroundColor: "#e0e0e0",
+    padding: 8,
+    borderRadius: 8,
+    marginRight: 8,
+  },
+  buttonBackText: {
+    color: "#000",
+    fontWeight: "bold",
+    fontSize: 16,
   },
   buttonSave: {
     backgroundColor: "#392de9",
@@ -95,5 +119,6 @@ const styles = StyleSheet.create({
   buttonSaveText: {
     color: "#fff",
     fontWeight: "bold",
+    fontSize: 16,
   },
 })

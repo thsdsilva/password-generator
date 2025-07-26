@@ -9,7 +9,8 @@ export function Home() {
   const [modalVisible, setModalVisible] = useState(false)
 
   function generatePassword() {
-    const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+"
+    const charset =
+      "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+"
     let password = ""
     for (let i = 0; i < size; i++) {
       const randomIndex = Math.floor(Math.random() * charset.length)
@@ -75,5 +76,6 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#fff",
     fontSize: 20,
+    fontWeight: "bold",
   },
 })
