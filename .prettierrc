@@ -3,5 +3,5 @@
   "jsxSingleQuote": false,
   "semi": false,
   "trailingComma": "es5",
-  "printWidth": 100
+  "printWidth": 90
 }
