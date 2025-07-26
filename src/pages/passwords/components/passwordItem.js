@@ -1,10 +1,27 @@
-import React from "react"
+import { useState } from "react"
 import { View, Text, StyleSheet, Pressable } from "react-native"
+import { Ionicons } from "@expo/vector-icons"
 
 export default function PasswordItem({ data, removePassword }) {
+  const [show, setShow] = useState(false)
+
   return (
     <Pressable onLongPress={removePassword} style={styles.container}>
-      <Text style={styles.content}>{data}</Text>
+      <View style={styles.passwordContainer}>
+        {show ? (
+          <Text style={styles.content}>{data} </Text>
+        ) : (
+          <View style={styles.mask} />
+        )}
+      </View>
+
+      <Pressable onPress={() => setShow(!show)}>
+        <Ionicons
+          name={show ? "eye-outline" : "eye-off-outline"}
+          size={24}
+          color="#fff"
+        />
+      </Pressable>
     </Pressable>
   )
 }
@@ -17,10 +34,21 @@ const styles = StyleSheet.create({
     marginBottom: 14,
     borderRadius: 8,
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
+  },
+  passwordContainer: {
+    flex: 1,
   },
   content: {
     color: "#fff",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  mask: {
+    height: 12,
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    alignSelf: "flex-start",
+    width: "45%",
   },
 })
