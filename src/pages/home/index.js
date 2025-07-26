@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { StyleSheet, View, Text, Image, TouchableOpacity, Modal } from 'react-native'
 import Slider from '@react-native-community/slider'
-import { PasswordModal } from './components/modal'
+import PasswordModal from './components/passwordModal'
 
 export function Home() {
   const [size, setSize] = useState(10)
