@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   content: {
-    backgroundColor: "white",
+    backgroundColor: "#fff",
     width: "85%",
     paddingTop: 24,
     paddingBottom: 24,
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
   message: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "black",
+    color: "#000",
     marginBottom: 24,
   },
   innerPassword: {
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   passwordText: {
-    color: "white",
+    color: "#fff",
     textAlign: "center",
   },
   buttonArea: {
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   buttonSaveText: {
-    color: "white",
+    color: "#fff",
     fontWeight: "bold",
   },
 })
