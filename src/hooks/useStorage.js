@@ -24,7 +24,7 @@ const useStorage = () => {
   const removeItem = async (key, item) => {
     try {
       let passwords = await getItem(key)
-      passwords = passwords.filter((p) => p !== item)
+      passwords = passwords.filter((password) => password !== item)
       await AsyncStorage.setItem(key, JSON.stringify(passwords))
       return passwords
     } catch (error) {
