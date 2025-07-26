@@ -24,14 +24,14 @@ export function Passwords() {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>My Passwords</Text>
       </View>
 
       <View style={styles.content}>
         <FlatList
-          style={{ flex: 1, paddingTop: 14 }}
+          style={styles.list}
           data={passwordsList}
           keyExtractor={(item) => String(item)}
           renderItem={({ item }) => (
@@ -44,6 +44,9 @@ export function Passwords() {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   header: {
     backgroundColor: "#392de9",
     paddingTop: 58,
@@ -58,5 +61,9 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     paddingHorizontal: 14,
+  },
+  list: {
+    flex: 1,
+    paddingTop: 14,
   },
 })
