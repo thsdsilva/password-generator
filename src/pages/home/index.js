@@ -1,7 +1,7 @@
-import { useState } from 'react'
-import { StyleSheet, View, Text, Image, TouchableOpacity, Modal } from 'react-native'
-import Slider from '@react-native-community/slider'
-import PasswordModal from './components/passwordModal'
+import { useState } from "react"
+import { StyleSheet, View, Text, Image, TouchableOpacity, Modal } from "react-native"
+import Slider from "@react-native-community/slider"
+import PasswordModal from "./components/passwordModal"
 
 export function Home() {
   const [size, setSize] = useState(10)
@@ -10,21 +10,18 @@ export function Home() {
 
   function generatePassword() {
     const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+"
-    let generatedPassword = ""
+    let password = ""
     for (let i = 0; i < size; i++) {
       const randomIndex = Math.floor(Math.random() * charset.length)
-      generatedPassword += charset[randomIndex]
+      password += charset[randomIndex]
     }
-    setpassword(generatedPassword)
+    setpassword(password)
     setModalVisible(true)
   }
 
   return (
     <View style={styles.container}>
-      <Image
-        source={require("../../assets/logo.png")}
-        style={styles.logo}
-      />
+      <Image source={require("../../assets/logo.png")} style={styles.logo} />
 
       <Text style={styles.indicator}>{size} characters</Text>
 
@@ -40,8 +37,8 @@ export function Home() {
         <Text style={styles.buttonText}>Generate password</Text>
       </TouchableOpacity>
 
-      <Modal visible={modalVisible} animationType='fade' transparent={true}>
-        <PasswordModal password={password} handleClose={() => setModalVisible(false) } />
+      <Modal visible={modalVisible} animationType="fade" transparent={true}>
+        <PasswordModal password={password} handleClose={() => setModalVisible(false)} />
       </Modal>
     </View>
   )
@@ -50,9 +47,9 @@ export function Home() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F3F3FF',
+    backgroundColor: "#F3F3FF",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   logo: {
     marginBottom: 48,
@@ -76,7 +73,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   buttonText: {
-    color: 'white',
+    color: "white",
     fontSize: 20,
-  }
+  },
 })
