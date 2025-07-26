@@ -1,0 +1,26 @@
+import React from 'react';
+import { View, Text, StyleSheet, Pressable } from "react-native"
+
+export default function PasswordItem({ data, removePassword }) {
+    return (
+        <Pressable onLongPress={removePassword} style={styles.container}>
+            <Text style={styles.content}>{data}</Text>
+        </Pressable>
+    )
+}
+
+const styles = StyleSheet.create({
+    container: {
+        backgroundColor: '#0e0e0e',
+        padding: 14,
+        width: '100%',
+        marginBottom: 14,
+        borderRadius: 8,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    content: {
+        color: '#fff',
+    }
+});
