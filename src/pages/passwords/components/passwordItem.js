@@ -15,7 +15,7 @@ export default function PasswordItem({ data, removePassword }) {
         )}
       </View>
 
-      <Pressable onPress={() => setShow(!show)}>
+      <Pressable onPress={() => setShow(!show)} hitSlop={14}>
         <Ionicons
           name={show ? "eye-outline" : "eye-off-outline"}
           size={24}
