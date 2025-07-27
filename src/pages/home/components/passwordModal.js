@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
   message: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#000",
+    color: "#2d2e5f",
     marginBottom: 24,
   },
   passwordContainer: {
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   buttonSave: {
-    backgroundColor: "#392de9",
+    backgroundColor: "#4c5cff",
     padding: 8,
     borderRadius: 8,
   },
