@@ -1,4 +1,4 @@
-import { useState } from "react"
+import React, { useRef, useState } from "react"
 import {
   View,
   Text,
@@ -7,42 +7,83 @@ import {
   TouchableOpacity,
   Modal,
   Switch,
+  Animated,
 } from "react-native"
-import Slider from "@react-native-community/slider"
+import { Slider } from "@miblanchard/react-native-slider"
 import PasswordModal from "./components/passwordModal"
 
 export function Home() {
   const [size, setSize] = useState(10)
-  const [password, setpassword] = useState("")
+  const [password, setPassword] = useState("")
   const [modalVisible, setModalVisible] = useState(false)
   const [useSymbols, setUseSymbols] = useState(false)
 
+  const scale = useRef(new Animated.Value(1)).current
+  const hasMoved = useRef(false)
+
   function generatePassword() {
+    const count = Math.floor(size)
     const charset = useSymbols
       ? "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+"
       : "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-    let password = ""
-    for (let i = 0; i < size; i++) {
+    let pwd = ""
+    for (let i = 0; i < count; i++) {
       const randomIndex = Math.floor(Math.random() * charset.length)
-      password += charset[randomIndex]
+      pwd += charset[randomIndex]
     }
-    setpassword(password)
+    setPassword(pwd)
     setModalVisible(true)
+  }
+
+  function handleSlidingStart() {
+    hasMoved.current = false
+  }
+
+  function handleValueChange(value) {
+    setSize(value)
+    if (!hasMoved.current && value !== size) {
+      hasMoved.current = true
+      Animated.spring(scale, {
+        toValue: 1.4,
+        friction: 6,
+        useNativeDriver: true,
+      }).start()
+    }
+  }
+
+  function handleSlidingComplete() {
+    Animated.spring(scale, {
+      toValue: 1,
+      friction: 6,
+      useNativeDriver: true,
+    }).start()
+    hasMoved.current = false
   }
 
   return (
     <View style={styles.container}>
       <Image source={require("../../assets/logo.png")} style={styles.logo} />
 
-      <Text style={styles.indicator}>{size} characters</Text>
+      <Text style={styles.indicator}>{Math.floor(size)} characters</Text>
 
-      <Slider
-        style={styles.slider}
-        minimumValue={6}
-        maximumValue={20}
-        value={size}
-        onValueChange={(value) => setSize(Math.round(value))}
-      />
+      <View style={styles.sliderContainer}>
+        <Slider
+          style={styles.slider}
+          value={size}
+          onSlidingStart={handleSlidingStart}
+          onValueChange={handleValueChange}
+          onSlidingComplete={handleSlidingComplete}
+          minimumValue={6}
+          maximumValue={20}
+          step={0}
+          renderThumbComponent={() => (
+            <Animated.View style={[styles.thumb, { transform: [{ scale }] }]} />
+          )}
+          minimumTrackTintColor="#018786"
+          thumbTintColor="#018786"
+          maximumTrackTintColor="#BDBDBD"
+        />
+      </View>
 
       <View style={styles.useSymbolsContainer}>
         <Text style={styles.label}>Include special characters</Text>
@@ -58,7 +99,7 @@ export function Home() {
         <Text style={styles.buttonText}>Generate password</Text>
       </TouchableOpacity>
 
-      <Modal visible={modalVisible} animationType="fade" transparent={true}>
+      <Modal visible={modalVisible} animationType="fade" transparent>
         <PasswordModal password={password} handleClose={() => setModalVisible(false)} />
       </Modal>
     </View>
@@ -73,22 +114,28 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   logo: {
-    marginBottom: 48,
+    marginBottom: 40,
   },
   indicator: {
     fontSize: 20,
     fontWeight: "bold",
     color: "#4a4a68",
+    marginBottom: 12,
   },
-  slider: {
+  sliderContainer: {
     width: "80%",
-    height: 50,
+    paddingHorizontal: 14,
+  },
+  thumb: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: "#018786",
   },
   useSymbolsContainer: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 14,
   },
   label: {
     color: "#2d2e5f",
@@ -102,6 +149,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     justifyContent: "center",
     alignItems: "center",
+    marginTop: 16,
   },
   buttonText: {
     color: "#fff",
