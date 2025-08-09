@@ -76,11 +76,8 @@ export function Home() {
           minimumValue={6}
           maximumValue={20}
           step={0}
-          renderThumbComponent={() => (
-            <Animated.View style={[styles.thumb, { transform: [{ scale }] }]} />
-          )}
-          minimumTrackTintColor="#018786"
-          thumbTintColor="#018786"
+          minimumTrackTintColor="#5568fe"
+          thumbTintColor="#5568fe"
           maximumTrackTintColor="#BDBDBD"
         />
       </View>
@@ -126,12 +123,12 @@ const styles = StyleSheet.create({
     width: "80%",
     paddingHorizontal: 14,
   },
-  thumb: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
-    backgroundColor: "#018786",
-  },
+  // thumb: {
+  //   width: 24,
+  //   height: 24,
+  //   borderRadius: 12,
+  //   backgroundColor: "#018786",
+  // },
   useSymbolsContainer: {
     flexDirection: "row",
     alignItems: "center",
