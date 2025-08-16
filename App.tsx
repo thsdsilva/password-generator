@@ -1,10 +1,5 @@
-import { NavigationContainer } from "@react-navigation/native"
-import { Routes } from "./src/routes"
+import AppScreen from './src/screens/AppScreen'
 
 export default function App() {
-  return (
-    <NavigationContainer>
-      <Routes/>
-    </NavigationContainer>
-  )
+  return <AppScreen />
 }
