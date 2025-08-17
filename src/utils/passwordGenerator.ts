@@ -1,5 +1,4 @@
 import * as Crypto from 'expo-crypto'
-import { Strength } from '../components/StrengthBar'
 
 export type GeneratorOptions = {
   length: number
@@ -9,18 +8,12 @@ export type GeneratorOptions = {
   symbol: boolean
 }
 
-const LOWER = 'abcdefghijklmnopqrstuvwxyz'
-const UPPER = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-const NUNBER = '0123456789'
-const SYMBOL = '!@#$%^&*()-_=+[]{};:,.<>/?'
-
-function buildPool(options: GeneratorOptions): string {
-  return (
-    LOWER +
-    (options.upper ? UPPER : '') +
-    (options.number ? NUNBER : '') +
-    (options.symbol ? SYMBOL : '')
-  )
+function buildPool(o: GeneratorOptions): string {
+  const lower = o.lower ? 'abcdefghijklmnopqrstuvwxyz' : ''
+  const upper = o.upper ? 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' : ''
+  const number = o.number ? '0123456789' : ''
+  const symbol = o.symbol ? '!@#$%^&*()-_=+[]{};:,.<>/?' : ''
+  return lower + upper + number + symbol
 }
 
 async function generateUniformIndicesBatch(
@@ -28,7 +21,6 @@ async function generateUniformIndicesBatch(
   passwordSize: number
 ): Promise<number[]> {
   const indices: number[] = []
-  const isPerfectDivision = poolSize % passwordSize === 0
   const unbiasedLimit = Math.floor(256 / poolSize) * poolSize
   const pickBatchSize = (remaining: number) => Math.max(64, remaining * 2)
 
@@ -38,7 +30,7 @@ async function generateUniformIndicesBatch(
     const bytes: Uint8Array = await Crypto.getRandomBytesAsync(batchSize)
 
     for (let i = 0; i < bytes.length && indices.length < passwordSize; i++) {
-      if (isPerfectDivision || bytes[i] < unbiasedLimit) {
+      if (bytes[i] < unbiasedLimit) {
         indices.push(bytes[i] % poolSize)
       }
     }
@@ -46,11 +38,13 @@ async function generateUniformIndicesBatch(
   return indices
 }
 
-export async function generatePasswordAsync(options: GeneratorOptions): Promise<string> {
-  const pool = buildPool(options)
-  const poolSize = pool.length
-  const passwordSize = options.length
-  const indices = await generateUniformIndicesBatch(poolSize, passwordSize)
+export async function generatePasswordAsync(opts: GeneratorOptions): Promise<string> {
+  const pool = buildPool(opts)
+  if (pool.length === 0) {
+    throw new Error('Select at least one character type')
+  }
+
+  const indices = await generateUniformIndicesBatch(pool.length, opts.length)
 
   let password = ''
   for (let i = 0; i < indices.length; i++) {
