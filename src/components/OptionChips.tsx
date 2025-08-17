@@ -1,4 +1,3 @@
-// OptionChips.tsx
 import React from 'react'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 import type { GeneratorOptions } from '../utils/passwordGenerator'
