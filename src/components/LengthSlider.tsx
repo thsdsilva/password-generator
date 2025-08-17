@@ -1,6 +1,7 @@
 import React from 'react'
 import { View, StyleSheet } from 'react-native'
 import { Slider } from '@miblanchard/react-native-slider'
+import { COLORS } from '../theme/colors'
 
 type Props = {
   length: number
@@ -10,9 +11,6 @@ type Props = {
   step?: number
   disabled?: boolean
 }
-
-const PRIMARY = '#5568fe'
-const ACCENT = '#b0bfff'
 
 export default function LengthSlider({
   length,
@@ -30,10 +28,10 @@ export default function LengthSlider({
         maximumValue={maximum}
         step={step}
         trackStyle={styles.track}
-        minimumTrackTintColor={PRIMARY}
-        maximumTrackTintColor={ACCENT}
+        minimumTrackTintColor={COLORS.primary}
+        maximumTrackTintColor={COLORS.secondary}
         thumbStyle={styles.thumb}
-        thumbTintColor={PRIMARY}
+        thumbTintColor={COLORS.primary}
       />
     </View>
   )
