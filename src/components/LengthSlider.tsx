@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
 import { Slider } from '@miblanchard/react-native-slider'
 import { COLORS } from '../theme/colors'
 
@@ -20,6 +20,7 @@ export default function LengthSlider({
 }: Props) {
   return (
     <View style={styles.container}>
+      <Text style={styles.lengthLabel}>Length: {length}</Text>
       <Slider
         value={length}
         onValueChange={(selectedLength) => onChange(selectedLength[0])}
@@ -38,7 +39,15 @@ export default function LengthSlider({
 
 const THUMB_SIZE = 26
 const styles = StyleSheet.create({
-  container: { width: '100%' },
+  container: {
+    width: '100%',
+    gap: 12,
+  },
+  lengthLabel: {
+    fontSize: 16,
+    fontWeight: '800',
+    color: COLORS.text,
+  },
   track: {
     height: 10,
     borderRadius: 999,
