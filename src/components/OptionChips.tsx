@@ -1,15 +1,32 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
-import type { GeneratorOptions } from '../utils/passwordGenerator'
 import { COLORS } from '../theme/colors'
 
-type OptionKey = 'lower' | 'upper' | 'number' | 'symbol'
+type ChipProps = {
+  label: string
+  active: boolean
+  onPress: () => void
+}
 
-type PasswordFlags = Omit<GeneratorOptions, 'length'>
-
-type Props = {
-  opts: PasswordFlags
-  setOpts: React.Dispatch<React.SetStateAction<PasswordFlags>>
+function Chip({ label, active, onPress }: ChipProps) {
+  return (
+    <Pressable
+      onPress={onPress}
+      hitSlop={8}
+      android_ripple={{
+        color: `${COLORS.primary}33`,
+        borderless: false,
+        foreground: true,
+      }}
+      style={({ pressed }) => [
+        styles.chip,
+        active && styles.chipActive,
+        pressed && { opacity: 0.85 },
+      ]}
+    >
+      <Text style={[styles.chipText, active && styles.chipTextActive]}>{label}</Text>
+    </Pressable>
+  )
 }
 
 const CHIP_CONFIG = [
@@ -19,36 +36,23 @@ const CHIP_CONFIG = [
   { label: 'Special (!@#$)', key: 'symbol' },
 ] as const
 
-function Chip({
-  label,
-  active,
-  onPress,
-}: {
-  label: string
-  active: boolean
-  onPress: () => void
-}) {
-  return (
-    <Pressable
-      onPress={onPress}
-      style={({ pressed }) => [
-        styles.chip,
-        active && styles.chipActive,
-        pressed && { opacity: 0.85 },
-      ]}
-      hitSlop={8}
-    >
-      <Text style={[styles.chipText, active && styles.chipTextActive]}>{label}</Text>
-    </Pressable>
-  )
+type OptionKey = (typeof CHIP_CONFIG)[number]['key']
+type PasswordFlags = Record<OptionKey, boolean>
+
+type Props = {
+  opts: PasswordFlags
+  setOpts: React.Dispatch<React.SetStateAction<PasswordFlags>>
 }
 
 export default function OptionChips({ opts, setOpts }: Props) {
-  function safeToggle(key: OptionKey) {
-    const changedState = { ...opts, [key]: !opts[key] }
-    if (!Object.values(changedState).some(Boolean)) return
-    setOpts(changedState)
-  }
+  const safeToggle = useCallback(
+    (key: OptionKey) => {
+      const next = { ...opts, [key]: !opts[key] }
+      if (!Object.values(next).some(Boolean)) return
+      setOpts(next)
+    },
+    [opts, setOpts]
+  )
 
   return (
     <View style={styles.chipsRow}>
@@ -78,6 +82,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.border,
     backgroundColor: COLORS.background,
+    overflow: 'hidden',
   },
   chipActive: {
     borderColor: COLORS.primary,
