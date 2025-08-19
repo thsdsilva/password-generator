@@ -9,7 +9,6 @@ type Props = {
   minimum?: number
   maximum?: number
   step?: number
-  disabled?: boolean
 }
 
 export default function LengthSlider({
@@ -40,7 +39,10 @@ export default function LengthSlider({
 const THUMB_SIZE = 26
 const styles = StyleSheet.create({
   container: { width: '100%' },
-  track: { height: 10, borderRadius: 999 },
+  track: {
+    height: 10,
+    borderRadius: 999,
+  },
   thumb: {
     width: THUMB_SIZE,
     height: THUMB_SIZE,
