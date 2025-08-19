@@ -61,7 +61,6 @@ export default function StrengthMeter({ options }: Props) {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 12,
     gap: 8,
   },
   weight: { fontWeight: '800' },
