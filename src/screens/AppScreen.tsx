@@ -40,14 +40,14 @@ export default function AppScreen() {
     >
       <ScrollView contentContainerStyle={styles.scrollview}>
         <View style={styles.page}>
-          <LinearGradient
+          <View
             style={styles.headerBar}
-            colors={[COLORS.primary, COLORS.secondary]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
+            // colors={[COLORS.primary, COLORS.secondary]}
+            // start={{ x: 0, y: 0 }}
+            // end={{ x: 1, y: 1 }}
           >
             <Text style={styles.headerTitle}>Password Generator</Text>
-          </LinearGradient>
+          </View>
 
           <View style={styles.card}>
             <Text style={styles.cardLabel}>Generated password</Text>
@@ -91,6 +91,7 @@ const styles = StyleSheet.create({
   headerBar: {
     borderRadius: 24,
     padding: 16,
+    backgroundColor: COLORS.primary,
   },
   headerTitle: {
     color: COLORS.background,
