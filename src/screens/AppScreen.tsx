@@ -1,15 +1,10 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native'
-import * as Clipboard from 'expo-clipboard'
 import * as Haptics from 'expo-haptics'
 import { LinearGradient } from 'expo-linear-gradient'
-import StrengthBar, {
-  Strength,
-  calculateStrength,
-  strengthColor,
-} from '../components/StrengthBar'
 import { generatePasswordAsync } from '../utils/passwordGenerator'
-import { Copy, RefreshCw } from 'lucide-react-native'
+import PasswordPanel from '../components/PasswordPanel'
+import StrengthMeter from '../components/StrengthMeter'
 import LengthSlider from '../components/LengthSlider'
 import OptionChips from '../components/OptionChips'
 import { COLORS } from '../theme/colors'
@@ -36,21 +31,6 @@ export default function AppScreen() {
     })()
   }, [opts, length])
 
-  const strength: Strength = useMemo(
-    () => calculateStrength({ ...opts, length }),
-    [opts, length]
-  )
-
-  const copy = async () => {
-    await Clipboard.setStringAsync(password)
-    Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {})
-  }
-
-  const refresh = () => {
-    setOpts((opts) => ({ ...opts }))
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {})
-  }
-
   return (
     <LinearGradient
       style={styles.container}
@@ -72,32 +52,15 @@ export default function AppScreen() {
           <View style={styles.card}>
             <Text style={styles.cardLabel}>Generated password</Text>
 
-            <View style={styles.passwordRow}>
-              <View style={styles.passwordField}>
-                <Text style={styles.passwordText} selectable>
-                  {password}
-                </Text>
-                <Pressable onPress={copy} hitSlop={8}>
-                  <Copy size={20} />
-                </Pressable>
-              </View>
+            <PasswordPanel
+              password={password}
+              onRefresh={() => setOpts((opts) => ({ ...opts }))}
+            />
 
-              <Pressable onPress={refresh} style={styles.refreshButton} hitSlop={8}>
-                <RefreshCw size={20} color={COLORS.background} />
-              </Pressable>
-            </View>
-
-            <View>
-              <Text style={[styles.strengthText, strengthColor(strength)]}>
-                {strength}
-              </Text>
-              <StrengthBar strength={strength} />
-            </View>
+            <StrengthMeter options={{ ...opts, length }} />
           </View>
 
           <View style={styles.card}>
-            <Text style={styles.lengthLabel}>Length: {length}</Text>
-
             <LengthSlider length={length} onChange={setLength} />
 
             <OptionChips opts={opts} setOpts={setOpts} />
@@ -142,58 +105,20 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     padding: 20,
     elevation: 2,
-    gap: 8,
+    gap: 16,
   },
   cardLabel: {
     fontSize: 13,
     fontWeight: '700',
     color: COLORS.muted,
-    marginBottom: 8,
   },
   passwordRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
-    marginBottom: 16,
-  },
-  passwordField: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 12,
-    borderWidth: 1,
-    borderColor: COLORS.secondary,
-    borderRadius: 16,
-    backgroundColor: `${COLORS.secondary}2e`,
-    minHeight: 48,
-    gap: 8,
-  },
-  passwordText: {
-    flex: 1,
-    flexWrap: 'wrap',
-    fontFamily: 'monospace',
-    fontSize: 18,
-    lineHeight: 24,
-    textAlign: 'center',
-    color: COLORS.text,
-  },
-  refreshButton: {
-    width: 44,
-    height: 44,
-    borderRadius: 12,
-    backgroundColor: COLORS.primary,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  strengthText: { fontWeight: '800' },
-  lengthLabel: {
-    fontSize: 16,
-    fontWeight: '800',
-    color: COLORS.text,
   },
   note: {
     color: COLORS.muted,
     fontSize: 12,
-    marginTop: 12,
   },
 })
