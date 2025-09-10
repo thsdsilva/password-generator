@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "password-generator",
+    "name": "Password Generator",
     "slug": "password-generator",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -10,20 +10,19 @@
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
-    "ios": {
-      "supportsTablet": true
+      "backgroundColor": "#b0bfff"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "monochrome": "./assets/adaptive-icon.png",
+        "backgroundColor": "#b0bfff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "dev.thsdsilva.passwordgenerator"
     },
-    "web": {
-      "favicon": "./assets/favicon.png"
+    "ios": {
+      "bundleIdentifier": "dev.thsdsilva.passwordgenerator"
     }
   }
 }
