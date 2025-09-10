@@ -20,6 +20,11 @@
       },
       "edgeToEdgeEnabled": true,
       "package": "dev.thsdsilva.passwordgenerator"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "c4208651-5d94-48e7-90e0-53e7b97a1213"
+      }
     }
   }
 }
