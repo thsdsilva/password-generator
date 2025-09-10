@@ -33,7 +33,8 @@ const CHIP_CONFIG = [
   { label: 'Lowercase (a-z)', key: 'lower' },
   { label: 'Uppercase (A-Z)', key: 'upper' },
   { label: 'Numbers (0-9)', key: 'number' },
-  { label: 'Special (!@#$)', key: 'symbol' },
+  { label: 'Symbols (!@#$)', key: 'symbol' },
+  { label: 'Avoid ambiguous (lI1O0)', key: 'ambiguous' },
 ] as const
 
 type OptionKey = (typeof CHIP_CONFIG)[number]['key']

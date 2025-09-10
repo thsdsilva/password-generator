@@ -54,10 +54,6 @@ export default function PasswordPanel({ password, onRefresh }: Props) {
     return parts ? parts.join(`\n`) : password
   }, [password, charsPerLine])
 
-  useEffect(() => {
-    console.log({ textAreaWidth, charWidth, charsPerLine })
-  }, [textAreaWidth, charWidth, charsPerLine])
-
   return (
     <View style={styles.passwordRow}>
       <View style={styles.passwordField}>

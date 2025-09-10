@@ -6,14 +6,27 @@ export type GeneratorOptions = {
   upper: boolean
   number: boolean
   symbol: boolean
+  ambiguous?: boolean
 }
 
-function buildPool(o: GeneratorOptions): string {
-  const lower = o.lower ? 'abcdefghijklmnopqrstuvwxyz' : ''
-  const upper = o.upper ? 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' : ''
-  const number = o.number ? '0123456789' : ''
-  const symbol = o.symbol ? '!@#$%^&*()-_=+[]{};:,.<>/?' : ''
-  return lower + upper + number + symbol
+const AMBIGUOUS = 'lI1O0'
+
+function buildPool(opts: GeneratorOptions): string {
+  let lower = opts.lower ? 'abcdefghijklmnopqrstuvwxyz' : ''
+  let upper = opts.upper ? 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' : ''
+  let number = opts.number ? '0123456789' : ''
+  let symbol = opts.symbol ? '!@#$%^&*()-_=+[]{};:,.<>/?' : ''
+
+  let pool = lower + upper + number + symbol
+
+  if (opts.ambiguous) {
+    pool = pool
+      .split('')
+      .filter((char) => !AMBIGUOUS.includes(char))
+      .join('')
+  }
+
+  return pool
 }
 
 async function generateUniformIndicesBatch(

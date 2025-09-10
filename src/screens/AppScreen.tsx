@@ -16,6 +16,7 @@ export default function AppScreen() {
     upper: true,
     number: true,
     symbol: false,
+    ambiguous: false,
   })
   const [password, setPassword] = useState('')
 
@@ -40,12 +41,7 @@ export default function AppScreen() {
     >
       <ScrollView contentContainerStyle={styles.scrollview}>
         <View style={styles.page}>
-          <View
-            style={styles.headerBar}
-            // colors={[COLORS.primary, COLORS.secondary]}
-            // start={{ x: 0, y: 0 }}
-            // end={{ x: 1, y: 1 }}
-          >
+          <View style={styles.headerBar}>
             <Text style={styles.headerTitle}>Password Generator</Text>
           </View>
 
