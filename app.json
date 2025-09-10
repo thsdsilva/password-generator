@@ -20,9 +20,6 @@
       },
       "edgeToEdgeEnabled": true,
       "package": "dev.thsdsilva.passwordgenerator"
-    },
-    "ios": {
-      "bundleIdentifier": "dev.thsdsilva.passwordgenerator"
     }
   }
 }
