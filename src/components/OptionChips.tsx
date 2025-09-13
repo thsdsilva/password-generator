@@ -38,8 +38,13 @@ const CHIP_CONFIG = [
 ] as const
 
 type OptionKey = (typeof CHIP_CONFIG)[number]['key']
-type PasswordFlags = Record<OptionKey, boolean>
+type CharKey = Exclude<OptionKey, 'ambiguous'>
 
+function isCharKey(key: OptionKey): key is CharKey {
+  return key !== 'ambiguous'
+}
+
+type PasswordFlags = Record<OptionKey, boolean>
 type Props = {
   opts: PasswordFlags
   setOpts: React.Dispatch<React.SetStateAction<PasswordFlags>>
@@ -48,11 +53,32 @@ type Props = {
 export default function OptionChips({ opts, setOpts }: Props) {
   const safeToggle = useCallback(
     (key: OptionKey) => {
-      const next = { ...opts, [key]: !opts[key] }
-      if (!Object.values(next).some(Boolean)) return
-      setOpts(next)
+      setOpts((currentState) => {
+        if (key === 'ambiguous') {
+          return { ...currentState, ambiguous: !currentState.ambiguous }
+        }
+
+        if (isCharKey(key)) {
+          const activeCount =
+            (currentState.lower ? 1 : 0) +
+            (currentState.upper ? 1 : 0) +
+            (currentState.number ? 1 : 0) +
+            (currentState.symbol ? 1 : 0)
+
+          const willTurnOff = currentState[key] === true
+          const isLastActive = activeCount === 1
+
+          if (willTurnOff && isLastActive) {
+            return currentState
+          }
+
+          return { ...currentState, [key]: !currentState[key] }
+        }
+
+        return currentState
+      })
     },
-    [opts, setOpts]
+    [setOpts]
   )
 
   return (
