@@ -1,8 +1,8 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { View, Text, StyleSheet, Pressable, LayoutChangeEvent } from 'react-native'
 import * as Clipboard from 'expo-clipboard'
 import * as Haptics from 'expo-haptics'
-import { Copy, RefreshCw } from 'lucide-react-native'
+import { Copy, RefreshCw, Check } from 'lucide-react-native'
 import { COLORS } from '../theme/colors'
 
 type Props = {
@@ -11,9 +11,13 @@ type Props = {
 }
 
 export default function PasswordPanel({ password, onRefresh }: Props) {
+  const [copied, setCopied] = useState(false)
+
   const copy = async () => {
     await Clipboard.setStringAsync(password)
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {})
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
   }
 
   const refresh = () => {
@@ -69,11 +73,16 @@ export default function PasswordPanel({ password, onRefresh }: Props) {
         </View>
 
         <Pressable onPress={copy} hitSlop={8}>
-          <Copy size={20} />
+          {copied ? <Check size={20} /> : <Copy size={20} />}
         </Pressable>
       </View>
 
-      <Pressable onPress={refresh} style={styles.refreshButton} hitSlop={8}>
+      <Pressable
+        onPress={refresh}
+        style={styles.refreshButton}
+        android_ripple={{ color: `${COLORS.background}40`, borderless: true }}
+        hitSlop={8}
+      >
         <RefreshCw size={20} color={COLORS.background} />
       </Pressable>
     </View>
