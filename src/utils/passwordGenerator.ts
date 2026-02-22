@@ -10,27 +10,54 @@ export type GeneratorOptions = {
 }
 
 const AMBIGUOUS = 'lI1O0'
+const LOWER = 'abcdefghijklmnopqrstuvwxyz'
+const UPPER = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+const NUMBER = '0123456789'
+const SYMBOL = '!@#$%&^*?-_'
 
-export function buildPool(opts: GeneratorOptions): string {
-  let lower = opts.lower ? 'abcdefghijklmnopqrstuvwxyz' : ''
-  let upper = opts.upper ? 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' : ''
-  let number = opts.number ? '0123456789' : ''
-  let symbol = opts.symbol ? '!@#$%*?-_&^' : ''
+function removeAmbiguous(chars: string): string {
+  return chars
+    .split('')
+    .filter((char) => !AMBIGUOUS.includes(char))
+    .join('')
+}
 
-  let pool = lower + upper + number + symbol
+function buildEnabledPools(opts: GeneratorOptions): string[] {
+  const pools: string[] = []
+
+  if (opts.lower) pools.push(LOWER)
+  if (opts.upper) pools.push(UPPER)
+  if (opts.number) pools.push(NUMBER)
+  if (opts.symbol) pools.push(SYMBOL)
 
   if (opts.ambiguous) {
-    pool = pool
-      .split('')
-      .filter((char) => !AMBIGUOUS.includes(char))
-      .join('')
+    return pools.map(removeAmbiguous).filter((pool) => pool.length > 0)
   }
 
-  return pool
+  return pools
 }
 
 export function calculatePoolSize(opts: GeneratorOptions): number {
-  return buildPool(opts).length
+  return buildEnabledPools(opts).join('').length
+}
+
+async function drawUnbiasedInt(maxExclusive: number): Promise<number> {
+  const unbiasedLimit = Math.floor(256 / maxExclusive) * maxExclusive
+
+  while (true) {
+    const bytes: Uint8Array = await Crypto.getRandomBytesAsync(1)
+    const byte = bytes[0]
+    if (byte < unbiasedLimit) {
+      return byte % maxExclusive
+    }
+  }
+}
+
+async function shuffleChars(chars: string[]): Promise<void> {
+  for (let i = chars.length - 1; i > 0; i--) {
+    const j = await drawUnbiasedInt(i + 1)
+    ;[chars[i], chars[j]] = [chars[j], chars[i]]
+  }
 }
 
 async function generateUniformIndicesBatch(
@@ -55,17 +82,24 @@ async function generateUniformIndicesBatch(
   return indices
 }
 
+async function pickRandomCharsFromPool(pool: string, size: number): Promise<string[]> {
+  const indices = await generateUniformIndicesBatch(pool.length, size)
+  return indices.map((index) => pool[index])
+}
+
 export async function generatePasswordAsync(opts: GeneratorOptions): Promise<string> {
-  const pool = buildPool(opts)
-  if (pool.length === 0) {
-    throw new Error('Select at least one character type')
-  }
+  const enabledPools = buildEnabledPools(opts)
+  const charsetPool = enabledPools.join('')
 
-  const indices = await generateUniformIndicesBatch(pool.length, opts.length)
+  const requiredCharsPromises = enabledPools.map((set) => pickRandomCharsFromPool(set, 1))
+  const requiredCharsNested = await Promise.all(requiredCharsPromises)
+  const requiredChars = requiredCharsNested.map((value) => value[0])
 
-  let password = ''
-  for (let i = 0; i < indices.length; i++) {
-    password += pool[indices[i]]
-  }
-  return password
+  const remainingSize = opts.length - requiredChars.length
+  const remainingChars = await pickRandomCharsFromPool(charsetPool, remainingSize)
+
+  const chars = [...requiredChars, ...remainingChars]
+  await shuffleChars(chars)
+
+  return chars.join('')
 }
