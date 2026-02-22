@@ -15,7 +15,7 @@ export function buildPool(opts: GeneratorOptions): string {
   let lower = opts.lower ? 'abcdefghijklmnopqrstuvwxyz' : ''
   let upper = opts.upper ? 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' : ''
   let number = opts.number ? '0123456789' : ''
-  let symbol = opts.symbol ? '!@#$%^&*()-_=+[]{};:,.<>/?' : ''
+  let symbol = opts.symbol ? '!@#$%*?-_&^' : ''
 
   let pool = lower + upper + number + symbol
 
