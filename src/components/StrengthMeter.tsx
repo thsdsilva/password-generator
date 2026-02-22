@@ -1,16 +1,12 @@
 import React, { useMemo } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
-import { GeneratorOptions } from '../utils/passwordGenerator'
+import { calculatePoolSize, GeneratorOptions } from '../utils/passwordGenerator'
 import { COLORS } from '../theme/colors'
 
 export type Strength = 'Weak' | 'Medium' | 'Fair' | 'Strong' | 'Excellent' | 'Exceptional'
 
 export function estimateEntropyBits(opts: GeneratorOptions): number {
-  let space = 0
-  if (opts.lower) space += 26
-  if (opts.upper) space += 26
-  if (opts.number) space += 10
-  if (opts.symbol) space += 28
+  const space = calculatePoolSize(opts)
   if (space <= 0) return 0
   return opts.length * Math.log2(space)
 }

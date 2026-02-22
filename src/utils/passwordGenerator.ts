@@ -11,7 +11,7 @@ export type GeneratorOptions = {
 
 const AMBIGUOUS = 'lI1O0'
 
-function buildPool(opts: GeneratorOptions): string {
+export function buildPool(opts: GeneratorOptions): string {
   let lower = opts.lower ? 'abcdefghijklmnopqrstuvwxyz' : ''
   let upper = opts.upper ? 'ABCDEFGHIJKLMNOPQRSTUVWXYZ' : ''
   let number = opts.number ? '0123456789' : ''
@@ -27,6 +27,10 @@ function buildPool(opts: GeneratorOptions): string {
   }
 
   return pool
+}
+
+export function calculatePoolSize(opts: GeneratorOptions): number {
+  return buildPool(opts).length
 }
 
 async function generateUniformIndicesBatch(
