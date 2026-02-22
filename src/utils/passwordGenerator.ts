@@ -13,7 +13,7 @@ const AMBIGUOUS = 'lI1O0'
 const LOWER = 'abcdefghijklmnopqrstuvwxyz'
 const UPPER = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 const NUMBER = '0123456789'
-const SYMBOL = '!@#$%&^*?-_'
+const SYMBOL = '!@#$%&^*?'
 
 function removeAmbiguous(chars: string): string {
   return chars
