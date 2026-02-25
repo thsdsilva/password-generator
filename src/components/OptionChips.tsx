@@ -106,8 +106,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     borderRadius: 999,
     borderWidth: 1,
-    borderColor: COLORS.border,
-    backgroundColor: COLORS.background,
+    borderColor: COLORS.borderVariant,
+    backgroundColor: COLORS.backgroundVariant,
     overflow: 'hidden',
   },
   chipActive: {
