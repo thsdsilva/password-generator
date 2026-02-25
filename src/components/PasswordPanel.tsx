@@ -1,5 +1,5 @@
-import React, { useMemo, useState, useRef, useEffect } from 'react'
-import { View, Text, StyleSheet, Pressable, LayoutChangeEvent } from 'react-native'
+import React, { useState, useRef, useEffect } from 'react'
+import { View, Text, StyleSheet, Pressable, Platform } from 'react-native'
 import * as Clipboard from 'expo-clipboard'
 import * as Haptics from 'expo-haptics'
 import { Copy, RefreshCw, Check } from 'lucide-react-native'
@@ -44,50 +44,12 @@ export default function PasswordPanel({ password, onRefresh }: Props) {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {})
   }
 
-  const [textAreaWidth, setTextAreaWidth] = useState(0)
-  const [charWidth, setCharWidth] = useState(0)
-
-  const PROBE_TEXT = 'Aa0#Aa0#Aa0#Aa0#Aa0#'
-
-  const onTextAreaLayout = (event: LayoutChangeEvent) => {
-    const width = event.nativeEvent.layout.width
-    if (width && width !== textAreaWidth) setTextAreaWidth(width)
-  }
-
-  const onProbeLayout = (event: LayoutChangeEvent) => {
-    const width = event.nativeEvent.layout.width
-    const measured = width > 0 ? width / PROBE_TEXT.length : 0
-    if (measured && charWidth === 0) {
-      setCharWidth(measured)
-    } else if (!measured && charWidth === 0) {
-      setCharWidth(0.6 * 18)
-    }
-  }
-
-  const charsPerLine = useMemo(() => {
-    if (!textAreaWidth || !charWidth) return 0
-    const maxChars = Math.floor((textAreaWidth - 10) / charWidth)
-    return Math.max(1, maxChars)
-  }, [textAreaWidth, charWidth])
-
-  const formattedPassword = useMemo(() => {
-    if (!password || !charsPerLine) return password
-    const regExp = new RegExp(`.{1,${charsPerLine}}`, `g`)
-    const parts = password.match(regExp)
-    return parts ? parts.join(`\n`) : password
-  }, [password, charsPerLine])
-
   return (
     <View style={styles.passwordRow}>
       <View style={styles.passwordField}>
-        <View style={styles.textArea} onLayout={onTextAreaLayout}>
-          {charWidth === 0 && (
-            <Text style={[styles.passwordText, styles.probe]} onLayout={onProbeLayout}>
-              {PROBE_TEXT}
-            </Text>
-          )}
-          <Text style={styles.passwordText} selectable>
-            {formattedPassword}
+        <View style={styles.textArea}>
+          <Text style={styles.passwordText} selectable textBreakStrategy='highQuality'>
+            {password}
           </Text>
         </View>
 
@@ -130,15 +92,15 @@ const styles = StyleSheet.create({
   },
   passwordText: {
     flexShrink: 1,
-    fontFamily: 'monospace',
+    fontFamily: Platform.select({
+      ios: 'Menlo',
+      android: 'monospace',
+      default: 'monospace',
+    }),
     fontSize: 18,
     lineHeight: 24,
     textAlign: 'center',
     color: COLORS.text,
-  },
-  probe: {
-    position: 'absolute',
-    opacity: 0,
   },
   refreshButton: {
     width: 44,
